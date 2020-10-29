@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//completed until episode 2 3:39
 public static class PerlinNoise
 {
     public static float[,] GeneratePerlinNoiseMap(int width, int height, float scale)
