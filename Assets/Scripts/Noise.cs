@@ -25,6 +25,9 @@ public static class Noise
         float maxNoiseHeight = float.MinValue;
         float minNoiseHeight = float.MaxValue;
 
+        float halfWidth = width / 2f;
+        float halfHeight = height / 2f;
+
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
@@ -39,8 +42,9 @@ public static class Noise
                     //sampling at integral value will return the same result
                     //frequency affect the spread of sampling points
                     //offset sampling point for each octaves to a random position to get a unique noise map
-                    float samplingPointX = x / scale * frequency + octaveOffsets[o].x;
-                    float samplingPointY = y / scale * frequency + octaveOffsets[o].y;
+                    //modified to zoom into the center when scale is increase
+                    float samplingPointX = (x - halfWidth) / scale * frequency + octaveOffsets[o].x;
+                    float samplingPointY = (y - halfHeight) / scale * frequency + octaveOffsets[o].y;
 
                     //mapping the range from 0.. 1 to -1..1
                     float perlinNoiseValue = Mathf.PerlinNoise(samplingPointX, samplingPointY) * 2 - 1;
