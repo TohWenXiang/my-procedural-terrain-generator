@@ -8,8 +8,22 @@ public class MapGenerator : MonoBehaviour
     public int mapHeight;
     public float noiseScale;
 
+    private MapDisplay display;
+
+    public void Awake()
+    {
+        display = GetComponent<MapDisplay>();
+    }
+
     public void GenerateMap()
     {
-        float[,] perlinNoiseMap = PerlinNoise.GeneratePerlinNoiseMap(mapWidth, mapHeight, noiseScale);
+        float[,] noiseMap = Noise.PerlinNoise2D(mapWidth, mapHeight, noiseScale);
+
+        if (!display)
+        {
+            display = FindObjectOfType<MapDisplay>();
+        }
+
+        display.DrawNoiseMap(noiseMap);
     }
 }

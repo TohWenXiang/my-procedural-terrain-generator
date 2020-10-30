@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//stopped at episode 2 9:30
 public class MapDisplay : MonoBehaviour
 {
     public Renderer textureRenderer;

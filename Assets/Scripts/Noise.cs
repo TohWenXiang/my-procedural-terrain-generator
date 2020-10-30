@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 //completed until episode 2 3:39
-public static class PerlinNoise
+public static class Noise
 {
-    public static float[,] GeneratePerlinNoiseMap(int width, int height, float scale)
+    public static float[,] PerlinNoise2D(int width, int height, float scale)
     {
         float[,] perlinNoiseMap = new float[width, height];
 
