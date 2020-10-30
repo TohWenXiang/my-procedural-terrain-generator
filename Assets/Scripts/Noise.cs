@@ -5,14 +5,23 @@ using UnityEngine;
 //completed until episode 2 3:39
 public static class Noise
 {
-    public static float[,] PerlinNoise2D(int width, int height, float scale, int octavesCount, float lacunarity, float persistence)
+    public static float[,] PerlinNoise2D(int width, int height, int seed, float scale, int octavesCount, float lacunarity, float persistence, Vector2 manualOffset)
     {
+        int rngRange = 100000;
+        System.Random rng = new System.Random(seed);
         float[,] perlinNoiseMap = new float[width, height];
+        Vector2[] octaveOffsets = new Vector2[octavesCount];
 
-        //prevent divide by zero error by clamping lower bounds to epsilon
+        for (int i = 0; i < octavesCount; i++)
+        {
+            float offsetX = rng.Next(-rngRange, rngRange) + manualOffset.x;
+            float offsetY = rng.Next(-rngRange, rngRange) + manualOffset.y;
+            octaveOffsets[i] = new Vector2(offsetX, offsetY);
+        }
+
+        //prevent divide by zero error
         scale = scale <= 0 ? Mathf.Epsilon : scale;
 
-        //keep track of highest and lowest noise height
         float maxNoiseHeight = float.MinValue;
         float minNoiseHeight = float.MaxValue;
 
@@ -22,7 +31,6 @@ public static class Noise
             {
                 float amplitude = 1;
                 float frequency = 1;
-                //Noise height current location
                 float totalNoiseHeight = 0;
 
                 for (int o = 0; o < octavesCount; o++)
@@ -30,8 +38,9 @@ public static class Noise
                     //convert x to non integral value by dividing it by scale
                     //sampling at integral value will return the same result
                     //frequency affect the spread of sampling points
-                    float samplingPointX = x / scale * frequency;
-                    float samplingPointY = y / scale * frequency;
+                    //offset sampling point for each octaves to a random position to get a unique noise map
+                    float samplingPointX = x / scale * frequency + octaveOffsets[o].x;
+                    float samplingPointY = y / scale * frequency + octaveOffsets[o].y;
 
                     //mapping the range from 0.. 1 to -1..1
                     float perlinNoiseValue = Mathf.PerlinNoise(samplingPointX, samplingPointY) * 2 - 1;

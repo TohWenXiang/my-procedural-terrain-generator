@@ -12,6 +12,9 @@ public class MapGenerator : MonoBehaviour
     public float lacunarity;
     public float persistance;
 
+    public int seed;
+    public Vector2 manualOffset;
+
     public bool autoUpdate;
 
     private MapDisplay display = null;
@@ -28,7 +31,7 @@ public class MapGenerator : MonoBehaviour
             display = FindObjectOfType<MapDisplay>();
         }
 
-        float[,] noiseMap = Noise.PerlinNoise2D(mapWidth, mapHeight, noiseScale, octavesCount, lacunarity, persistance);
+        float[,] noiseMap = Noise.PerlinNoise2D(mapWidth, mapHeight, seed, noiseScale, octavesCount, lacunarity, persistance, manualOffset);
         
         display.DrawNoiseMap(noiseMap);
     }
