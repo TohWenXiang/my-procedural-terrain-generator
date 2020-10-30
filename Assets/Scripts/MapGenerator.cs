@@ -10,6 +10,7 @@ public class MapGenerator : MonoBehaviour
 
     public int octavesCount;
     public float lacunarity;
+    [Range(0, 1)]
     public float persistance;
 
     public int seed;
@@ -34,5 +35,13 @@ public class MapGenerator : MonoBehaviour
         float[,] noiseMap = Noise.PerlinNoise2D(mapWidth, mapHeight, seed, noiseScale, octavesCount, lacunarity, persistance, manualOffset);
         
         display.DrawNoiseMap(noiseMap);
+    }
+
+    private void OnValidate()
+    {
+        if (mapWidth < 1) mapWidth = 1;
+        if (mapHeight < 1) mapHeight = 1;
+        if (lacunarity < 1) lacunarity = 1;
+        if (octavesCount < 0) octavesCount = 0;
     }
 }
