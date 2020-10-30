@@ -28,6 +28,7 @@ public class MapDisplay : MonoBehaviour
         texture.Apply();
 
         //set texture to material and resize it to width and height
+        //HDRP or URP use "sharedMaterial.SetTexture("_UnlitColorMap" or "_BaseColorMap", texture);"
         textureRenderer.sharedMaterial.mainTexture = texture;
         textureRenderer.transform.localScale = new Vector3(width, 1, height);
     }

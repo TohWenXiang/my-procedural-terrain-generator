@@ -8,18 +8,28 @@ public class MapGenerator : MonoBehaviour
     public int mapHeight;
     public float noiseScale;
 
+    public int octavesCount;
+    public float lacunarity;
+    public float persistance;
+
     public bool autoUpdate;
+
+    private MapDisplay display = null;
 
     public void Awake()
     {
-        
+        GenerateMap();
     }   
 
     public void GenerateMap()
     {
-        float[,] noiseMap = Noise.PerlinNoise2D(mapWidth, mapHeight, noiseScale);
+        if (display == null)
+        {
+            display = FindObjectOfType<MapDisplay>();
+        }
 
-        MapDisplay display = FindObjectOfType<MapDisplay>();
+        float[,] noiseMap = Noise.PerlinNoise2D(mapWidth, mapHeight, noiseScale, octavesCount, lacunarity, persistance);
+        
         display.DrawNoiseMap(noiseMap);
     }
 }

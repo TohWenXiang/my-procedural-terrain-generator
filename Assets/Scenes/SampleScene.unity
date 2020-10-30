@@ -260,3 +260,4 @@ MonoBehaviour:
   mapWidth: 100
   mapHeight: 100
   noiseScale: 0.3
+  autoUpdate: 1
