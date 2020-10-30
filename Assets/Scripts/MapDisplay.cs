@@ -27,6 +27,7 @@ public class MapDisplay : MonoBehaviour
         texture.SetPixels(colorsMap);
         texture.Apply();
 
+        //set texture to material and resize it to width and height
         textureRenderer.sharedMaterial.mainTexture = texture;
         textureRenderer.transform.localScale = new Vector3(width, 1, height);
     }

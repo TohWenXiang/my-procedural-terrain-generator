@@ -10,7 +10,15 @@ public class MapGeneratorEditor : Editor
     {
         MapGenerator mapGenerator = (MapGenerator)target;
 
-        DrawDefaultInspector();
+        //if anything force inspector to redraw and autoupdate is true, generate map
+        if(DrawDefaultInspector())
+        {
+            if (mapGenerator.autoUpdate)
+            {
+                mapGenerator.GenerateMap();
+            }
+        }
+
 
         if(GUILayout.Button("Generate"))
         {
