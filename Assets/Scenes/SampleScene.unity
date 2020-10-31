@@ -260,9 +260,9 @@ MonoBehaviour:
   mapWidth: 100
   mapHeight: 100
   noiseScale: 8.22
-  octavesCount: 4
-  lacunarity: 2.6
-  persistance: 0.3
+  octavesCount: 2
+  lacunarity: 3.89
+  persistance: 0.16
   seed: 115
   manualOffset: {x: 3.93, y: 0.21}
   autoUpdate: 1

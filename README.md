@@ -6,3 +6,4 @@
         - [ ] for the 2nd dimension
         - [ ] and the 3rd dimension
     - [ ] Convert to HDRP or URP?
+    - [ ] Fix issue with lacunarity and persistance

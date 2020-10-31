@@ -60,8 +60,14 @@ public static class Noise
                 }
 
                 //find the hightes and lowest noise height
-                maxNoiseHeight = totalNoiseHeight > maxNoiseHeight ? totalNoiseHeight : maxNoiseHeight;
-                minNoiseHeight = totalNoiseHeight < minNoiseHeight ? totalNoiseHeight : minNoiseHeight;
+                if (totalNoiseHeight > maxNoiseHeight)
+                {
+                    maxNoiseHeight = totalNoiseHeight;
+                }
+                else if (totalNoiseHeight < minNoiseHeight)
+                {
+                    minNoiseHeight = totalNoiseHeight;
+                }
                 perlinNoiseMap[x, y] = totalNoiseHeight;
             }
         }
