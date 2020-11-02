@@ -12,6 +12,9 @@ public static class Noise
         float[,] perlinNoiseMap = new float[width, height];
         Vector2[] octaveOffsets = new Vector2[octavesCount];
 
+        /*
+         *  This is to get a uniquely random noise map that is controlled by a seed and a manual offset         
+         */
         for (int i = 0; i < octavesCount; i++)
         {
             float offsetX = rng.Next(-rngRange, rngRange) + manualOffset.x;
@@ -19,7 +22,7 @@ public static class Noise
             octaveOffsets[i] = new Vector2(offsetX, offsetY);
         }
 
-        //prevent divide by zero error
+        //protect against divide by zero error
         scale = scale <= 0 ? Mathf.Epsilon : scale;
 
         float maxNoiseHeight = float.MinValue;
@@ -36,30 +39,35 @@ public static class Noise
                 float frequency = 1;
                 float totalNoiseHeight = 0;
 
+                /*
+                 * For every subsequent octaves, 
+                 * amplitude will be decrease due to persistance
+                 * frequency will be increase due to lacunarity
+                 */
                 for (int o = 0; o < octavesCount; o++)
                 {
-                    //convert x to non integral value by dividing it by scale
-                    //sampling at integral value will return the same result
-                    //frequency affect the spread of sampling points
-                    //offset sampling point for each octaves to a random position to get a unique noise map
-                    //modified to zoom into the center when scale is increase
+                    /*
+                     *  Sampling perlin noise at every integral value will result in the same value, 
+                     *  thus x is divided by scale to convert it into an non-integral value.
+                     *  
+                     *  Before scaling, offset by half width/height to zoom into the center.
+                     *  
+                     *  Frequency controls the spread of sampling points.
+                     */
                     float samplingPointX = (x - halfWidth) / scale * frequency + octaveOffsets[o].x;
                     float samplingPointY = (y - halfHeight) / scale * frequency + octaveOffsets[o].y;
 
-                    //mapping the range from 0.. 1 to -1..1
-                    float perlinNoiseValue = Mathf.PerlinNoise(samplingPointX, samplingPointY) * 2 - 1;
+                    float perlinNoiseValue = Mathf.PerlinNoise(samplingPointX, samplingPointY);
+                    float remappedPerlinNoiseValue = perlinNoiseValue * 2 - 1;
 
-                    //total noise height consist of the perlin noise value of each subsequent octaves
-                    //amplitude affect noise height
-                    totalNoiseHeight += perlinNoiseValue * amplitude;
+                    float currentOctaveNoiseHeight = remappedPerlinNoiseValue * amplitude;
+                    totalNoiseHeight += currentOctaveNoiseHeight;
 
-                    //amplitude will decrease for each subsequent octave
                     amplitude *= persistence;
-                    //and frequency will increase for each subsequent octave
-                    frequency *= lacunarity; 
+                    frequency *= lacunarity;
                 }
 
-                //find the hightes and lowest noise height
+                //keep track of the highest and lowest noise height
                 if (totalNoiseHeight > maxNoiseHeight)
                 {
                     maxNoiseHeight = totalNoiseHeight;
@@ -68,16 +76,17 @@ public static class Noise
                 {
                     minNoiseHeight = totalNoiseHeight;
                 }
+
                 perlinNoiseMap[x, y] = totalNoiseHeight;
             }
         }
 
-        //normalize value back to 0.. 1
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
-                perlinNoiseMap[x, y] = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, perlinNoiseMap[x, y]);
+                float normalizedPerlinNoiseValue = Mathf.InverseLerp(minNoiseHeight, maxNoiseHeight, perlinNoiseMap[x, y]);
+                perlinNoiseMap[x, y] = normalizedPerlinNoiseValue;
             }
         }
 
